@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid'; // Using solid icons
+import { MenuItem } from "@/type";
 
 const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
     const [open, setOpen] = useState(false); // State to toggle the submenu
