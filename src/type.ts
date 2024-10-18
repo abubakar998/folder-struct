@@ -1,13 +1,11 @@
-import { UUID } from "crypto";
-
 export type MenuItem = {
-    id: UUID,
+    id: string,
     label: string;
     children?: MenuItem[];
 }
 
 export type MenuFlatData = {
-    id: UUID,
+    id: string,
     label: string,
-    parentId: UUID | null
+    parentId: string | null
 }

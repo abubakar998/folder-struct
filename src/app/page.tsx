@@ -1,10 +1,14 @@
 "use client"; // This is a client component 👈🏽
 import NestedMenu from "@/components/NestedMenu";
-import { menuData } from "@/constants";
+import { menuData , menuFlatData } from "@/constants";
 import { GlobalProvider, useGlobalContext } from '../context/GlobalContext';
+import buildNestedMenu from "@/utils/buildNestedMenu";
 
 export default function Home() {
   const { nestedMenuData } = useGlobalContext();  
+
+  const flatData = buildNestedMenu(menuFlatData)
+  // console.log(flatData)
 
   return (
     <GlobalProvider>

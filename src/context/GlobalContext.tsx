@@ -6,6 +6,7 @@ import { getFromLocalStorage, saveToLocalStorage } from "@/utils/localStorage";
 interface GlobalState {
   nestedMenuData: MenuItem[] | null;
   flatData: MenuFlatData[] | null;
+  setFlatData: (data: MenuFlatData[] | null) => void;
   getDataFromLocalStorage: () => void;
   setDataToLocalStorage: (data: MenuFlatData[] | null) => void;
 }
@@ -14,6 +15,7 @@ interface GlobalState {
 const defaultState: GlobalState = {
   nestedMenuData: null,
   flatData: null,
+  setFlatData: () => { } ,
   getDataFromLocalStorage: () => { },
   setDataToLocalStorage: () => { }
 };
@@ -53,7 +55,7 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ flatData, nestedMenuData, getDataFromLocalStorage, setDataToLocalStorage }}>
+    <GlobalContext.Provider value={{ flatData, setFlatData, nestedMenuData, getDataFromLocalStorage, setDataToLocalStorage }}>
       {children}
     </GlobalContext.Provider>
   );

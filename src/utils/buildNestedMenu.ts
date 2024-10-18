@@ -1,14 +1,14 @@
-import { UUID } from 'crypto';
 import { MenuFlatData, MenuItem } from '../type';
 
 const buildNestedMenu = (flatData: MenuFlatData[]): MenuItem[] => {
     const nestedMenu: MenuItem[] = [];
-    const menuMap: { [key: UUID]: MenuItem & { children?: MenuItem[] } } = {};
+    const menuMap: { [key: string]: MenuItem & { children?: MenuItem[] } } = {};
 
     // Create a map of all items by id
     flatData.forEach(item => {
         menuMap[item.id] = { ...item, children: [] };
     });
+    console.log(menuMap)
 
     flatData.forEach(item => {
         if (item.parentId === null) {
@@ -16,8 +16,9 @@ const buildNestedMenu = (flatData: MenuFlatData[]): MenuItem[] => {
             nestedMenu.push(menuMap[item.id]);
         } else {
             // Nested item, append to its parent's children array
-            menuMap[item.parentId].children!.push(menuMap[item.id]);
+                menuMap[item.parentId].children.push(menuMap[item.id]);
         }
+
     });
 
     return nestedMenu;
