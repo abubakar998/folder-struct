@@ -11,7 +11,6 @@ const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
     const [showAddInputField, setShowAddInputField] = useState(false);
     const [showEditInputField, setShowEditInputField] = useState(false);
 
-
     const { flatData, getDataFromLocalStorage, setDataToLocalStorage } = useGlobalContext();
 
     const handleExpandOrCollapse = () => {
