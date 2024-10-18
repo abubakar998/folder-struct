@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { PlusIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/solid'; // Using solid icons
 import { MenuItem } from "@/type";
+import { useGlobalContext } from "@/context/GlobalContext";
 
 const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
     const [open, setOpen] = useState(false); // State to toggle the submenu
     const [showOption, setShowOption] = useState(false); // State to toggle the submenu
+
+    const { flatData, nestedMenuData, getDataFromLocalStorage, setDataToLocalStorage  } = useGlobalContext();  
 
     const handleExpandOrCollapse = () => {
         setOpen(!open);

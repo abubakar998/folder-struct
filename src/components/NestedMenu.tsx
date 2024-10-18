@@ -1,3 +1,4 @@
+import { MenuItem } from "@/type";
 import MenuItemComponent from "./MenuItemComponent";
 
 const NestedMenu: React.FC<{ data: MenuItem[] }> = ({ data }) => {
