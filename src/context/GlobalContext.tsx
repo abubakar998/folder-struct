@@ -1,21 +1,12 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { MenuFlatData, MenuItem } from "@/type";
+import { GlobalState, MenuFlatData, MenuItem } from "@/type";
 import buildNestedMenu from "@/utils/buildNestedMenu";
 import { getFromLocalStorage, saveToLocalStorage } from "@/utils/localStorage";
-// Define the shape of the global state
-interface GlobalState {
-  nestedMenuData: MenuItem[] | null;
-  flatData: MenuFlatData[] | null;
-  setFlatData: (data: MenuFlatData[] | null) => void;
-  getDataFromLocalStorage: () => void;
-  setDataToLocalStorage: (data: MenuFlatData[] | null) => void;
-}
 
 // Create a default state
 const defaultState: GlobalState = {
   nestedMenuData: null,
   flatData: null,
-  setFlatData: () => { } ,
   getDataFromLocalStorage: () => { },
   setDataToLocalStorage: () => { }
 };
@@ -24,8 +15,13 @@ const defaultState: GlobalState = {
 const GlobalContext = createContext<GlobalState>(defaultState);
 
 // Custom hook to use the GlobalContext
-export const useGlobalContext = () => useContext(GlobalContext);
-
+export const useGlobalContext = (): GlobalState => {
+  const context = useContext(GlobalContext);
+  if (!context) {
+    throw new Error('useGlobalContext must be used within a GlobalProvider');
+  }
+  return context;
+};
 // Context provider component
 interface Props {
   children: ReactNode;
@@ -34,18 +30,24 @@ interface Props {
 export const GlobalProvider: React.FC<Props> = ({ children }) => {
   const [nestedMenuData, setNestedMenuData] = useState<MenuItem[] | null>(null);
   const [flatData, setFlatData] = useState<MenuFlatData[] | null>(null);
+  window.addEventListener('load', () => {
+    localStorage.clear(); // Clears all data from localStorage
+  });
 
   const getDataFromLocalStorage = () => {
     const menuFlatData = getFromLocalStorage<MenuFlatData[]>('menuFlatData');
     if (menuFlatData) {
-      setFlatData(menuFlatData)
       const nestedMenu = buildNestedMenu(menuFlatData);
+      setFlatData(menuFlatData)
       setNestedMenuData(nestedMenu)
+    } else {
+      console.log('No data in local storage')
     }
   }
 
   const setDataToLocalStorage = (data: MenuFlatData[] | null) => {
     if (data) {
+      setFlatData(data)
       saveToLocalStorage<MenuFlatData[]>('menuFlatData', data)
     }
   }
@@ -54,8 +56,10 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
     getDataFromLocalStorage()
   }, []);
 
+  const value = { flatData, nestedMenuData, getDataFromLocalStorage, setDataToLocalStorage };
+
   return (
-    <GlobalContext.Provider value={{ flatData, setFlatData, nestedMenuData, getDataFromLocalStorage, setDataToLocalStorage }}>
+    <GlobalContext.Provider value={value}>
       {children}
     </GlobalContext.Provider>
   );

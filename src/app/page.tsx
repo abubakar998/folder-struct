@@ -1,23 +1,11 @@
 "use client"; // This is a client component 👈🏽
-import NestedMenu from "@/components/NestedMenu";
-import { menuData , menuFlatData } from "@/constants";
-import { GlobalProvider, useGlobalContext } from '../context/GlobalContext';
-import buildNestedMenu from "@/utils/buildNestedMenu";
+import { GlobalProvider } from '../context/GlobalContext';
+import App from "@/components/App";
 
 export default function Home() {
-  const { nestedMenuData } = useGlobalContext();  
-
-  const flatData = buildNestedMenu(menuFlatData)
-  // console.log(flatData)
-
   return (
     <GlobalProvider>
-      <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-        <div>
-          <h1>Dynamic Nested Menu</h1>
-          <NestedMenu data={nestedMenuData ? nestedMenuData : menuData} />
-        </div>
-      </div>
+      <App />
     </GlobalProvider>
   );
 }

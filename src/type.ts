@@ -9,3 +9,15 @@ export type MenuFlatData = {
     label: string,
     parentId: string | null
 }
+
+export type AddMenuProps = {
+    item: MenuItem | null,
+    setShowAddInputField: (data: boolean) => void;
+}
+
+export type GlobalState = {
+    nestedMenuData: MenuItem[] | null;
+    flatData: MenuFlatData[] | null;
+    getDataFromLocalStorage: () => void;
+    setDataToLocalStorage: (data: MenuFlatData[] | null) => void;
+  }
