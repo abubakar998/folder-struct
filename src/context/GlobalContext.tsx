@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { GlobalState, MenuFlatData, MenuItem } from "@/type";
 import buildNestedMenu from "@/utils/buildNestedMenu";
 import { getFromLocalStorage, saveToLocalStorage } from "@/utils/localStorage";
+import { useRouter } from 'next/navigation';
 
 // Create a default state
 const defaultState: GlobalState = {
@@ -30,9 +31,7 @@ interface Props {
 export const GlobalProvider: React.FC<Props> = ({ children }) => {
   const [nestedMenuData, setNestedMenuData] = useState<MenuItem[] | null>(null);
   const [flatData, setFlatData] = useState<MenuFlatData[] | null>(null);
-  window.addEventListener('load', () => {
-    localStorage.clear(); // Clears all data from localStorage
-  });
+  const router = useRouter();
 
   const getDataFromLocalStorage = () => {
     const menuFlatData = getFromLocalStorage<MenuFlatData[]>('menuFlatData');
@@ -54,7 +53,12 @@ export const GlobalProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     getDataFromLocalStorage()
-  }, []);
+
+    window.addEventListener('beforeunload', () => {
+      localStorage.clear(); // Clears all data from localStorage
+    });
+
+  }, [router]);
 
   const value = { flatData, nestedMenuData, getDataFromLocalStorage, setDataToLocalStorage };
 
