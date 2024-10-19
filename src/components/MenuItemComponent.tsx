@@ -4,6 +4,7 @@ import { MenuFlatData, MenuItem } from "@/type";
 import AddMenu from "./AddMenu";
 import { useGlobalContext } from "@/context/GlobalContext";
 import EditMenu from "./EditMenu";
+import removeItemById from "@/utils/removeItemById";
 
 const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
     const [open, setOpen] = useState(false); // State to toggle the submenu
@@ -32,11 +33,12 @@ const MenuItemComponent: React.FC<{ item: MenuItem }> = ({ item }) => {
     }
 
     const deleteMenu = () => {
-        const newFlatData: MenuFlatData[] = flatData
-            ? flatData.filter((data: MenuFlatData) => data.id !== item.id)
-            : [];
-        setDataToLocalStorage(newFlatData)
-        getDataFromLocalStorage()
+        if (flatData){
+            const newFlatData: MenuFlatData[] = removeItemById(flatData, item.id);
+            console.log(newFlatData)
+            setDataToLocalStorage(newFlatData)
+            getDataFromLocalStorage()
+        }
     }
 
     return (
